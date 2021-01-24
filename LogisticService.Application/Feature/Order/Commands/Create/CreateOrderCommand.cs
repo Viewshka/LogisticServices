@@ -52,10 +52,10 @@ namespace LogisticService.Application.Feature.Order.Commands.Create
 
         public async Task<int> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
+            var number = await _context.Orders.MaxAsync(order => order.Number, cancellationToken)+1;
             var entity = new Core.Entities.Order
             {
-                //TODO: Исправить генерацию номера
-                Number = Convert.ToInt32(new Guid().ToString("N")),
+                Number = number,
                 Status = StatusEnum.Отправлен,
                 UserId = _currentUserService.UserId,
 
