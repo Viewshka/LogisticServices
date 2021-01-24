@@ -2,34 +2,63 @@
   <header class="header-component">
     <DxToolbar class="header-toolbar">
       <DxItem
+          locate-in-menu="auto"
           location="before"
       >
         <DxButton
-            icon="menu"
-            styling-mode="outlined"
-            text="ButtonText"
+            icon="home"
+            styling-mode="text"
+            text="Главная"
             slot-scope="_"
+            @click="()=> $router.push('/home')"
         />
       </DxItem>
 
       <DxItem
-          v-if="!user"
+          locate-in-menu="auto"
           location="before"
       >
         <DxButton
+            icon="find"
+            styling-mode="text"
+            text="Отследить заказ"
+            slot-scope="_"
+            @click="findOrder"
+        />
+      </DxItem>
+
+      <DxItem
+          locate-in-menu="auto"
+          location="after"
+      >
+        <DxButton
+            v-if="user"
+            icon="cart"
+            styling-mode="text"
+            text="Мои заказы"
+            slot-scope="_"
+            @click="()=> $router.push('/cart')"
+        />
+      </DxItem>
+      <DxItem
+          location="after"
+          locate-in-menu="auto"
+      >
+        <DxButton
+            v-if="!user"
             icon="user"
+            class="user-button authorization"
+            height="100%"
             styling-mode="outlined"
             text="Войти"
             @click="logIn($event)"
             slot-scope="_"
         />
-      </DxItem>
-      <DxItem
-          v-else
-          location="before"
-      >
         <DxButton
+            v-else
             icon="user"
+            class="user-button authorization"
+            height="100%"
             styling-mode="outlined"
             :text="`Выйти ${user.userName}`"
             @click="logOut($event)"
@@ -37,6 +66,9 @@
         />
       </DxItem>
     </DxToolbar>
+    <OrderFindForm
+        :visible.sync="orderFindFormVisible"
+    />
   </header>
 </template>
 
@@ -45,6 +77,7 @@ import DxButton from "devextreme-vue/button";
 import DxToolbar, {DxItem} from "devextreme-vue/toolbar";
 import DxScrollView from "devextreme-vue/scroll-view";
 import auth from "../../auth";
+import OrderFindForm from "../../components/order-find-form";
 import {mapState} from 'vuex';
 
 export default {
@@ -56,6 +89,7 @@ export default {
   data() {
     return {
       user: null,
+      orderFindFormVisible: false,
     }
   },
   created() {
@@ -63,6 +97,9 @@ export default {
     auth.getUser().then((e) => this.user = e.data);
   },
   methods: {
+    findOrder() {
+      this.orderFindFormVisible=true
+    },
     async logIn(e) {
       console.log('login click')
       await this.$router.push({
@@ -85,14 +122,15 @@ export default {
     DxToolbar,
     DxItem,
     DxScrollView,
-    DxButton
+    DxButton,
+    OrderFindForm
   }
 }
 </script>
 
 <style lang="scss">
 @import "../../themes/generated/variables.base.scss";
-@import "../../dx-styles";
+@import "../../dx-styles.scss";
 
 .header-component {
   flex: 0 0 auto;
@@ -104,10 +142,6 @@ export default {
   }
 }
 
-.dx-toolbar {
-  background-color: #333 !important;
-}
-
 .dx-toolbar.header-toolbar .dx-toolbar-items-container .dx-toolbar-after {
   padding: 0 40px;
 
@@ -117,7 +151,7 @@ export default {
 }
 
 .dx-toolbar .dx-toolbar-item.dx-toolbar-button.menu-button {
-  //width: $side-panel-min-width;
+  width: $side-panel-min-width;
   text-align: center;
   padding: 0;
 }
@@ -133,16 +167,7 @@ export default {
   }
 
   .user-button > .dx-button-content {
-    padding: 3px;
+    //padding: 3px;
   }
 }
-
-.dx-button-text {
-  color: white !important;
-}
-
-.dx-icon {
-  color: white !important;
-}
-
 </style>

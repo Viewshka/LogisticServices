@@ -34,7 +34,7 @@ namespace LogisticService.WebUI.Controllers
             if (result.Succeeded) return Ok();
             
             
-            return BadRequest("Неверное имя пользователя");
+            return BadRequest("Неверное имя пользователя или пароль");
         }
 
         [HttpPost("register")]
