@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using LogisticService.Core.Entities.Identity;
+using LogisticService.Core.Enums;
 using LogisticService.WebUI.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -50,6 +51,7 @@ namespace LogisticService.WebUI.Controllers
             
             if (result.Succeeded)
             {
+                await _userManager.AddToRoleAsync(user, RolesEnum.Client.ToString());
                 await _signInManager.SignInAsync(user, false);
                 return Ok("Регистрация прошла успешно!");
             }

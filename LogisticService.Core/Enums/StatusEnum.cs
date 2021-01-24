@@ -1,6 +1,6 @@
 ﻿namespace LogisticService.Core.Enums
 {
-    public enum Status
+    public enum StatusEnum
     {
         Отправлен = 1,
         ПереданНаКомплектацию = 2,

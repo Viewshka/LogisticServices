@@ -41,7 +41,7 @@ namespace LogisticService.Core.Entities
         /// </summary>
         public DateTime? DateFinish { get; set; }
 
-        public Status Status { get; set; }
+        public StatusEnum Status { get; set; }
 
         /// <summary>
         /// Заказчик (клиент)
