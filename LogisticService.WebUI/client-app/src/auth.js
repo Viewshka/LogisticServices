@@ -16,11 +16,20 @@ export default {
             },
             body: JSON.stringify({userName: email, password: password, rememberMe: false})
         })
-            .then(() => {
-                this._user = null;
-                return {
-                    isOk: true,
-                };
+            .then((e) => {
+                if (e.ok){
+                    this._user = null;
+                    return {
+                        isOk: true,
+                    };  
+                }
+                return e.text().then(text=>{
+                    return {
+                        isOk: false,
+                        message: "Ошибка авторизации: "+text
+                    };
+                })
+
             }).catch(c => {
                 console.log(c)
                 return {
@@ -109,18 +118,39 @@ export default {
     },
 
     async createAccount(email, password) {
-        try {
-            // Send request
-            console.log(email, password);
-
-            return {
-                isOk: true
-            };
-        } catch {
-            return {
-                isOk: false,
-                message: "Failed to create account"
-            };
-        }
+        return fetch('api/account/register', {
+            method: "POST",
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userName: email,
+                password: password,
+                confirmPassword: password
+            })
+        })
+            .then(res => {
+                if (res.ok) {
+                    this._user = null;
+                    return {
+                        isOk: true,
+                    };
+                }
+                return res.json().then(i => {
+                    return {
+                        isOk: false,
+                        message: "Ошибка регистрации" + i.flatMap(m=>m.description).join(', ')
+                    };
+                })
+            })
+            .catch(c => {
+                console.log(c)
+                return {
+                    isOk: false,
+                    message: "Ошибка регистрации"
+                };
+            });
     }
 };

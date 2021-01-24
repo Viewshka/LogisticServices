@@ -2,62 +2,65 @@
   <form class="create-account-form" @submit.prevent="onSubmit">
     <dx-form :form-data="formData" :disabled="loading">
       <dx-item
-        data-field="email"
-        editor-type="dxTextBox"
-        :editor-options="{ stylingMode: 'filled', placeholder: 'Email', mode: 'email' }"
+          data-field="email"
+          editor-type="dxTextBox"
+          :editor-options="{ stylingMode: 'filled', placeholder: 'Имя пользователя', mode: 'text' }"
       >
-        <dx-required-rule message="Email is required" />
-        <dx-email-rule message="Email is invalid" />
-        <dx-label :visible="false" />
+        <dx-required-rule message="Имя пользователя обязательно"/>
+        <dx-label :visible="false"/>
       </dx-item>
       <dx-item
-        data-field="password"
-        editor-type="dxTextBox"
-        :editor-options="{ stylingMode: 'filled', placeholder: 'Password', mode: 'password' }"
+          data-field="password"
+          editor-type="dxTextBox"
+          :editor-options="{ stylingMode: 'filled', placeholder: 'Пароль', mode: 'password' }"
       >
-        <dx-required-rule message="Password is required" />
-        <dx-label :visible="false" />
+        <dx-required-rule message="Пароль обязателен"/>
+        <dx-label :visible="false"/>
       </dx-item>
       <dx-item
-        data-field="confirmedPassword"
-        editor-type="dxTextBox"
-        :editor-options="{ stylingMode: 'filled', placeholder: 'Confirm Password', mode: 'password' }"
+          data-field="confirmedPassword"
+          editor-type="dxTextBox"
+          :editor-options="{ stylingMode: 'filled', placeholder: 'Повторите пароль', mode: 'password' }"
       >
-        <dx-required-rule message="Password is required" />
+        <dx-required-rule message="Пароль обязателен"/>
         <dx-custom-rule
-          message="Passwords do not match"
-          :validation-callback="confirmPassword"
+            message="Пароли не совпадают"
+            :validation-callback="confirmPassword"
         />
-        <dx-label :visible="false" />
+        <dx-label :visible="false"/>
       </dx-item>
       <dx-item>
         <template #default>
           <div class='policy-info'>
-            By creating an account, you agree to the <router-link to="#">Terms of Service</router-link> and <router-link to="#">Privacy Policy</router-link>
+            Создавая аккаунт, вы соглашаетесь с
+            <router-link to="#">Правила сервиса</router-link>
+            и
+            <router-link to="#">Согласие на обработку персональных данных</router-link>
           </div>
         </template>
       </dx-item>
       <dx-button-item>
         <dx-button-options
-          width="100%"
-          type="default"
-          template="createAccount"
-          :use-submit-behavior="true"
+            width="100%"
+            type="default"
+            template="createAccount"
+            :use-submit-behavior="true"
         >
         </dx-button-options>
       </dx-button-item>
       <dx-item>
         <template #default>
           <div class="login-link">
-            Have an account? <router-link to="/login">Sign In</router-link>
+            Есть аккаунт?
+            <router-link to="/login-form">Войти</router-link>
           </div>
         </template>
       </dx-item>
       <template #createAccount>
         <div>
           <span class="dx-button-text">
-              <dx-loadIndicator v-if="loading" width="24px" height="24px" :visible="true" />
-              <span v-if="!loading">Create a new account</span>
+              <dx-loadIndicator v-if="loading" width="24px" height="24px" :visible="true"/>
+              <span v-if="!loading">Создать новый аккаунт</span>
           </span>
         </div>
       </template>
@@ -94,20 +97,20 @@ export default {
   },
   data() {
     return {
-        formData: {},
-        loading: false
+      formData: {},
+      loading: false
     }
   },
   methods: {
-    onSubmit: async function() {
-      const { email, password } = this.formData;
+    onSubmit: async function () {
+      const {email, password} = this.formData;
       this.loading = true;
 
       const result = await auth.createAccount(email, password);
       this.loading = false;
 
       if (result.isOk) {
-        this.$router.push("/login-form");
+        await this.$router.push("/login-form");
       } else {
         notify(result.message, 'error', 2000);
       }

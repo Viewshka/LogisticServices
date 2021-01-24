@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import simpleLayout from "../layouts/single-card";
 import login from "../views/login-form";
+import register from "../views/create-account-form";
 
 import defaultLayout from "../components/static/SideNavOuterToolbar";
 
@@ -30,6 +31,24 @@ const routes = [
         title: "Войти"
       }
     }
+  },
+  {
+    path: "/create-account",
+    name: "create-account",
+    meta: { requiresAuth: false },
+    components: {
+      layout: simpleLayout,
+      content: register
+    },
+    props: {
+      layout: {
+        title: "Регистрация"
+      }
+    }
+  },
+  {
+    path: "*",
+    redirect: "/"
   },
 ]
 
