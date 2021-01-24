@@ -27,7 +27,7 @@ const routes = [
     },
     props: {
       layout: {
-        title: "Sign In"
+        title: "Войти"
       }
     }
   },

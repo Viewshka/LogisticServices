@@ -4,15 +4,15 @@
       <dx-item
         data-field="email"
         editor-type="dxTextBox"
-        :editor-options="{ stylingMode: 'filled', placeholder: 'Email', mode: 'text' }"
+        :editor-options="{ stylingMode: 'filled', placeholder: 'Логин', mode: 'text' }"
       >
-        <dx-required-rule message="UserName is required" />
+        <dx-required-rule message="Имя пользователя обязательно" />
         <dx-label :visible="false" />
       </dx-item>
       <dx-item
         data-field='password'
         editor-type='dxTextBox'
-        :editor-options="{ stylingMode: 'filled', placeholder: 'Password', mode: 'password' }"
+        :editor-options="{ stylingMode: 'filled', placeholder: 'Пароль', mode: 'password' }"
       >
         <dx-required-rule message="Password is required" />
         <dx-label :visible="false" />
@@ -20,7 +20,7 @@
       <dx-item
         data-field="rememberMe"
         editor-type="dxCheckBox"
-        :editor-options="{ text: 'Remember me', elementAttr: { class: 'form-text' } }"
+        :editor-options="{ text: 'Запомнить меня', elementAttr: { class: 'form-text' } }"
       >
         <dx-label :visible="false" />
       </dx-item>
@@ -36,13 +36,13 @@
       <dx-item>
         <template #default>
           <div class="link">
-            <router-link to="/reset-password">Forgot password?</router-link>
+            <router-link to="/reset-password">Забыл пароль?</router-link>
           </div>
         </template>
       </dx-item>
       <dx-button-item>
         <dx-button-options
-          text="Create an account"
+          text="Создать аккаунт"
           width="100%"
           :on-click="onCreateAccountClick"
         />
@@ -51,7 +51,7 @@
         <div>
           <span class="dx-button-text">
             <dx-load-indicator v-if="loading" width="24px" height="24px" :visible="true" />
-            <span v-if="!loading">Sign In</span>
+            <span v-if="!loading">Войти</span>
           </span>
         </div>
       </template>

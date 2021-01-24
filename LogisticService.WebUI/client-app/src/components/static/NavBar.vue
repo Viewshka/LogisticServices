@@ -13,7 +13,7 @@
       </DxItem>
 
       <DxItem
-          v-if="!user.isAuthenticated"
+          v-if="!user"
           location="before"
       >
         <DxButton
@@ -45,37 +45,42 @@ import DxButton from "devextreme-vue/button";
 import DxToolbar, {DxItem} from "devextreme-vue/toolbar";
 import DxScrollView from "devextreme-vue/scroll-view";
 import auth from "../../auth";
+import {mapState} from 'vuex';
 
 export default {
   name: "NavBar",
   props: {
     title: String,
   },
+
   data() {
     return {
-      user: { },
+      user: null,
     }
   },
   created() {
+    // this.$store.dispatch('INIT_CURRENT_USER')
     auth.getUser().then((e) => this.user = e.data);
   },
-  methods:{
+  methods: {
     async logIn(e) {
       console.log('login click')
       await this.$router.push({
         path: "/login-form",
-        query: { redirect: this.$route.path }
+        query: {redirect: this.$route.path}
       });
     },
     async logOut(e) {
       auth.logOut();
       await this.$router.push({
         path: "/login-form",
-        query: { redirect: this.$route.path }
+        query: {redirect: this.$route.path}
       });
     },
   },
-  computed: {},
+  computed: {
+    // ...mapState(['currentUser',]),
+  },
   components: {
     DxToolbar,
     DxItem,

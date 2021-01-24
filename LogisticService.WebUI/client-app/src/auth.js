@@ -1,14 +1,7 @@
 import 'whatwg-fetch'
 
-const defaultUser = {
-    email: null,
-    isAuthenticated: false,
-    userId: 0,
-    userName: 'Гость'
-};
-
 export default {
-    _user: defaultUser,
+    _user: null,
     loggedIn() {
         return !!this._user;
     },
@@ -23,24 +16,42 @@ export default {
             },
             body: JSON.stringify({userName: email, password: password, rememberMe: false})
         })
-            .then(res => res.json())
-            .then(res => {
-                this._user = {...defaultUser, res};
+            .then(() => {
+                this._user = null;
                 return {
                     isOk: true,
-                    data: this._user
                 };
             }).catch(c => {
                 console.log(c)
                 return {
                     isOk: false,
-                    message: "Authentication failed"
+                    message: "Ошибка авторизации"
                 };
             });
     },
 
     async logOut() {
-        this._user = null;
+        return fetch('api/account/logout', {
+            method: "POST",
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(() => {
+                this._user = null;
+                return {
+                    isOk: true,
+                    message: "Вы вышли из системы"
+                };
+            }).catch(c => {
+                console.log(c)
+                return {
+                    isOk: false,
+                    message: "Возникла ошибка выхода из системы"
+                };
+            });
     },
 
     async getUser() {
@@ -50,7 +61,8 @@ export default {
         })
             .then(res => res.json())
             .then(res => {
-                console.log(res)
+                console.log('auth get user', res)
+                this._user = res;
                 return {
                     isOk: true,
                     data: this._user
