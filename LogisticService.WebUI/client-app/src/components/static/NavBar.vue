@@ -11,6 +11,31 @@
             slot-scope="_"
         />
       </DxItem>
+
+      <DxItem
+          v-if="!user.isAuthenticated"
+          location="before"
+      >
+        <DxButton
+            icon="user"
+            styling-mode="outlined"
+            text="Войти"
+            @click="logIn($event)"
+            slot-scope="_"
+        />
+      </DxItem>
+      <DxItem
+          v-else
+          location="before"
+      >
+        <DxButton
+            icon="user"
+            styling-mode="outlined"
+            :text="`Выйти ${user.userName}`"
+            @click="logOut($event)"
+            slot-scope="_"
+        />
+      </DxItem>
     </DxToolbar>
   </header>
 </template>
@@ -19,6 +44,7 @@
 import DxButton from "devextreme-vue/button";
 import DxToolbar, {DxItem} from "devextreme-vue/toolbar";
 import DxScrollView from "devextreme-vue/scroll-view";
+import auth from "../../auth";
 
 export default {
   name: "NavBar",
@@ -26,7 +52,28 @@ export default {
     title: String,
   },
   data() {
-    return {}
+    return {
+      user: { },
+    }
+  },
+  created() {
+    auth.getUser().then((e) => this.user = e.data);
+  },
+  methods:{
+    async logIn(e) {
+      console.log('login click')
+      await this.$router.push({
+        path: "/login-form",
+        query: { redirect: this.$route.path }
+      });
+    },
+    async logOut(e) {
+      auth.logOut();
+      await this.$router.push({
+        path: "/login-form",
+        query: { redirect: this.$route.path }
+      });
+    },
   },
   computed: {},
   components: {

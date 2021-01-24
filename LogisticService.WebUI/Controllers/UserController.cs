@@ -1,10 +1,12 @@
 ﻿using System.Threading.Tasks;
 using LogisticService.Application.Feature.User.Queries.GetAllUsers;
 using LogisticService.Application.Feature.User.Queries.GetCurrentUser;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LogisticService.WebUI.Controllers
 {
+    [Authorize]
     public class UserController : ApiController
     {
         [HttpGet("current-user")]

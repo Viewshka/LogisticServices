@@ -18,8 +18,8 @@
     "LogisticService": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
-      "launchBrowser": false,
-      "applicationUrl": "http://*:5005",
+      "launchBrowser": true,
+      "applicationUrl": "https://localhost:5005",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
