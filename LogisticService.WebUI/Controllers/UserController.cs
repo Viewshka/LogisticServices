@@ -9,10 +9,14 @@ namespace LogisticService.WebUI.Controllers
     [Authorize]
     public class UserController : ApiController
     {
+        [AllowAnonymous]
         [HttpGet("current-user")]
         public async Task<IActionResult> GetCurrentUser()
         {
-            return Ok(await Mediator.Send(new GetCurrentUserQuery()));
+            if (HttpContext.User.Identity.IsAuthenticated)
+                return Ok(await Mediator.Send(new GetCurrentUserQuery()));
+
+            return Ok();
         }
 
         [HttpGet("all")]

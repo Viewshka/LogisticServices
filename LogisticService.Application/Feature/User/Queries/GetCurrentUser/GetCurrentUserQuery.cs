@@ -25,27 +25,17 @@ namespace LogisticService.Application.Feature.User.Queries.GetCurrentUser
 
         public async Task<CurrentUserDto> Handle(GetCurrentUserQuery request, CancellationToken cancellationToken)
         {
-            if (_currentUserService.IsAuthenticated)
-            {
-                return await _context.Users
-                    .Where(user => user.Id == _currentUserService.UserId)
-                    .AsNoTracking()
-                    .Select(user => new CurrentUserDto
-                    {
-                        UserId = user.Id,
-                        UserName = user.UserName,
-                        Email = user.Email,
-                        IsAuthenticated = _currentUserService.IsAuthenticated
-                    })
-                    .FirstOrDefaultAsync(cancellationToken);
-            }
-
-            return new CurrentUserDto
-            {
-                UserId = _currentUserService.UserId,
-                UserName = _currentUserService.UserName,
-                IsAuthenticated = _currentUserService.IsAuthenticated
-            };
+            return await _context.Users
+                .Where(user => user.Id == _currentUserService.UserId)
+                .AsNoTracking()
+                .Select(user => new CurrentUserDto
+                {
+                    UserId = user.Id,
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    IsAuthenticated = _currentUserService.IsAuthenticated
+                })
+                .FirstOrDefaultAsync(cancellationToken);
         }
     }
 }
