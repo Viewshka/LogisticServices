@@ -22,7 +22,7 @@ namespace LogisticService.Application
             IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"),
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                     i => i.MigrationsAssembly("LogisticService.WebUI")));
             
             return services;
