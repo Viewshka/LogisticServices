@@ -42,11 +42,6 @@
           caption="Полная цена"
           :hiding-priority="8"
       />
-      <DxColumn
-          data-field="totalCost"
-          caption="Полная цена"
-          :hiding-priority="8"
-      />
 
       <DxColumn
           data-field="startPoint"
@@ -110,7 +105,7 @@
           :enabled="true"
           type="localStorage"
           :saving-timeout="0"
-          storage-key="ApprovalApp_ContractsGridStorage_№2"
+          storage-key="awdawdadsasczdvsv"
       />
       <DxSummary>
         <DxGroupItem summary-type="count"/>
@@ -144,6 +139,12 @@
         />
       </template>
     </DxDataGrid>
+
+    <OrderCreateForm
+        @submit="submit"
+        :visible.sync="formDataOrder.visible"
+        :form-data="formDataOrder.data"
+    />
   </div>
 </template>
 
@@ -170,6 +171,7 @@ import DxDataGrid, {
 import notify from "devextreme/ui/notify";
 import {confirm,} from 'devextreme/ui/dialog';
 import * as AspNetData from "devextreme-aspnet-data-nojquery";
+import OrderCreateForm from "../components/order-create-form";
 
 const dataSource = AspNetData.createStore({
   key: 'id',
@@ -192,6 +194,7 @@ const dataSourceServices = AspNetData.createStore({
     ajaxOptions.xhrFields = {withCredentials: true};
   },
 });
+import axios from 'axios';
 
 
 export default {
@@ -215,8 +218,7 @@ export default {
 
       formDataOrder: {
         visible: false,
-        id: null,
-        name: '',
+        data: {}
       },
 
       buttonNavigateOptions: {
@@ -243,7 +245,18 @@ export default {
     },
 
     insert() {
+      this.formDataOrder.data = {};
       this.formDataOrder.visible = true;
+    },
+    submit(data) {
+      axios.post(`/api/order/`, data)
+          .then(() => {
+            this.refreshDataGrid();
+            this.formDataOrder.visible=false;
+          })
+          .catch(reason => {
+            console.log(reason)
+          });
     },
     delete(data) {
       confirm(`Вы уверены, что хотите удалить заказ <b>'${data.name}'</b>?`, "Удаление")
@@ -335,6 +348,7 @@ export default {
     },
   },
   components: {
+    OrderCreateForm,
     DxDataGrid,
     DxColumn,
     DxFilterRow,
