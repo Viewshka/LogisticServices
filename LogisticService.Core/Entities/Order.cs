@@ -55,6 +55,8 @@ namespace LogisticService.Core.Entities
         /// <example>Курьерская доставка</example>
         public int ServiceTypeId { get; set; }
         public ServiceType ServiceType { get; set; }
+
+        public bool IsRemove { get; set; }
         
         /// <summary>
         /// Состав заказа

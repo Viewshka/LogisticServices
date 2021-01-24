@@ -35,7 +35,9 @@ namespace LogisticService.Application.Feature.Order.Queries.GetCurrentUserOrders
             CancellationToken cancellationToken)
         {
             return await _context.Orders
-                .Where(order => order.UserId == _currentUserService.UserId)
+                .Where(order => order.UserId == _currentUserService.UserId
+                                &&
+                                !order.IsRemove)
                 .ProjectTo<OrdersDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);

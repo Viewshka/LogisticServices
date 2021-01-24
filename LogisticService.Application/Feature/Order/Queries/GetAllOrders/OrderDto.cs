@@ -54,7 +54,7 @@ namespace LogisticService.Application.Feature.Order.Queries.GetAllOrders
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<Core.Entities.Order,OrdersDto>();
+            profile.CreateMap<Core.Entities.Order,AllOrdersDto>();
         }
     }
 }

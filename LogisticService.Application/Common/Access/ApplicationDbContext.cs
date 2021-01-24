@@ -73,6 +73,13 @@ namespace LogisticService.Application.Common.Access
                     FullName = "Штука",
                     ShortName = "шт",
                     Description = "Штука"
+                },
+                new Unit
+                {
+                    Id = 5,
+                    FullName = "Кубический метр",
+                    ShortName = "куб. м",
+                    Description = "Кубический метр"
                 }
             });
 
