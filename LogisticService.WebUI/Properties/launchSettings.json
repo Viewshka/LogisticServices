@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Archive": {
+    "LogisticService": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": false,
