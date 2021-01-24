@@ -8,6 +8,7 @@
         /// Товар, который надо транспортировать
         /// </summary>
         public string Product { get; set; }
+        
         /// <summary>
         /// Единицы измерения
         /// </summary>
