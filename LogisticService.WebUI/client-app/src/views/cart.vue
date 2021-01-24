@@ -96,7 +96,7 @@
           <a href="#"
              class="dx-link dx-icon-trash dx-link-icon"
              title="Удалить заказ"
-             v-on:click="delete(data.data)"
+             v-on:click="deleteOrder(data.data)"
           ></a>
         </div>
       </template>
@@ -258,11 +258,11 @@ export default {
             console.log(reason)
           });
     },
-    delete(data) {
-      confirm(`Вы уверены, что хотите удалить заказ <b>'${data.name}'</b>?`, "Удаление")
+    deleteOrder(data) {
+      confirm(`Вы уверены, что хотите удалить заказ <b>'${data.number}'</b>?`, "Удаление")
           .then((dialogResult) => {
             if (dialogResult) {
-              axios.delete(`/api/order/${data.id}`)
+              axios.delete(`/api/order/remove/${data.id}`)
                   .then(() => {
                     this.refreshDataGrid();
                   })
@@ -299,7 +299,7 @@ export default {
               text: 'Удалить',
               icon: 'trash',
               onItemClick: () => {
-                this.delete(e.row.data)
+                this.deleteOrder(e.row.data)
               }
             },
         );
