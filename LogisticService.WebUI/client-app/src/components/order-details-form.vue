@@ -185,6 +185,7 @@ export default {
           .then(res => {
             console.log('get details', res)
             this.formData = res;
+            this.localDataSource = res.orderStructures;
             return {
               isOk: true,
               data: this.formData
