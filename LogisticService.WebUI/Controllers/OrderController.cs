@@ -57,7 +57,7 @@ namespace LogisticService.WebUI.Controllers
         [HttpPost("cancel-order")]
         public async Task<IActionResult> CancelOrderAsync(CancelOrderCommand command)
             => Ok(await Mediator.Send(command));
-        
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateOrderAsync(int id, UpdateOrderCommand command)
         {
@@ -69,7 +69,11 @@ namespace LogisticService.WebUI.Controllers
         [HttpDelete("remove/{id}")]
         public async Task<IActionResult> RemoveOrderAsync(int id)
         {
-            await Mediator.Send(new ClientIsRemoveOrderCommand {Id = id});
+            if (HttpContext.User.IsInRole("Manager")) 
+                await Mediator.Send(new DeleteOrderCommand {Id = id});
+            else 
+                await Mediator.Send(new ClientIsRemoveOrderCommand {Id = id});
+            
             return NoContent();
         }
 
