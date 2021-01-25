@@ -4,6 +4,7 @@
       :drop-down-options="dropDownOptions"
       :data-source="dataSourceServices"
       :value.sync="currentValue"
+      :disabled="disabled"
       display-expr="name"
       value-expr="id"
       content-template="contentTemplate"
@@ -60,6 +61,10 @@ export default {
   components: {DxDataGrid, DxPaging, DxSelection, DxScrolling, DxColumn, DxDropDownBox, DxSearchPanel},
 
   props: {
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
     value: {
       type: Number,
       default: null

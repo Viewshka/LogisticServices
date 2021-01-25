@@ -24,7 +24,7 @@
           <DxSimpleItem
               :col-span="1"
               :label="{text: 'Откуда доставляем'}"
-              :disabled="true"
+              :editorOptions="{disabled: true}"
               data-field="startPoint"
               editor-type="dxTextBox"
           />
@@ -45,6 +45,7 @@
         <template #dropDownServiceEditor="{ data }">
           <DropDownServiceSelect
               :value="formData[data.dataField]"
+              :disabled="true"
               :on-value-changed="changeService"
           />
         </template>
