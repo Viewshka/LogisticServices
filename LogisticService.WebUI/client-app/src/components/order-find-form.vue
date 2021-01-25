@@ -32,7 +32,6 @@
       </div>
     </div>
   </DxPopup>
-
 </template>
 
 <script>

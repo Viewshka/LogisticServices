@@ -145,6 +145,11 @@
         :visible.sync="formDataOrder.visible"
         :form-data="formDataOrder.data"
     />
+    <OrderDetailsForm
+        @submit="submitUpdate"
+        :visible.sync="formDataOrderDetails.visible"
+        :order-id="formDataOrderDetails.orderId"
+    />
   </div>
 </template>
 
@@ -172,6 +177,7 @@ import notify from "devextreme/ui/notify";
 import {confirm,} from 'devextreme/ui/dialog';
 import * as AspNetData from "devextreme-aspnet-data-nojquery";
 import OrderCreateForm from "../components/order-create-form";
+import OrderDetailsForm from "../components/order-details-form";
 
 const dataSource = AspNetData.createStore({
   key: 'id',
@@ -196,7 +202,6 @@ const dataSourceServices = AspNetData.createStore({
 });
 import axios from 'axios';
 
-
 export default {
   name: "cart",
   data() {
@@ -220,6 +225,10 @@ export default {
         visible: false,
         data: {}
       },
+      formDataOrderDetails: {
+        visible: false,
+        orderId: 0
+      },
 
       buttonNavigateOptions: {
         disabled: true,
@@ -232,6 +241,8 @@ export default {
   methods: {
     navigateToOrder(id) {
       console.log(id)
+      this.formDataOrderDetails.orderId = id;
+      this.formDataOrderDetails.visible = true;
     },
     focusedRowChanged(e) {
       if (e.rowIndex > -1 && e.row.rowType === "data") {
@@ -252,7 +263,17 @@ export default {
       axios.post(`/api/order/`, data)
           .then(() => {
             this.refreshDataGrid();
-            this.formDataOrder.visible=false;
+            this.formDataOrder.visible = false;
+          })
+          .catch(reason => {
+            console.log(reason)
+          });
+    },
+    submitUpdate(data) {
+      axios.put(`/api/order/${data.id}`, data)
+          .then(() => {
+            this.refreshDataGrid();
+            this.formDataOrderDetails.visible = false;
           })
           .catch(reason => {
             console.log(reason)
@@ -348,6 +369,7 @@ export default {
     },
   },
   components: {
+    OrderDetailsForm,
     OrderCreateForm,
     DxDataGrid,
     DxColumn,

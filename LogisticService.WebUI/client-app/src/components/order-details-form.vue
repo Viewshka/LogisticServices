@@ -24,6 +24,7 @@
           <DxSimpleItem
               :col-span="1"
               :label="{text: 'Откуда доставляем'}"
+              :disabled="true"
               data-field="startPoint"
               editor-type="dxTextBox"
           />
@@ -92,9 +93,9 @@
               </DxColumn>
 
               <DxEditing
-                  :allow-updating="true"
-                  :allow-deleting="true"
-                  :allow-adding="true"
+                  :allow-updating="false"
+                  :allow-deleting="false"
+                  :allow-adding="false"
                   mode="cell"
               />
             </DxDataGrid>
@@ -138,14 +139,14 @@ const dataSourceUnits = AspNetData.createStore({
   },
 });
 export default {
-  name: "order-create-form",
+  name: "order-details-form",
   props: {
     visible: {
       type: Boolean,
       required: true
     },
-    formData: {
-      type: Object,
+    orderId: {
+      type: Number,
       required: true
     },
   },
@@ -160,17 +161,46 @@ export default {
       popupVisible: false,
       formRefName: 'form',
 
+      formData: {},
       localDataSource: [],
       dataSourceUnits,
     }
   },
+  watch: {
+    visible: async function (isVisible) {
+      if (isVisible) {
+        await this.initOrderInformation()
+      }
+    },
+  },
   created: function () {
   },
   methods: {
+    async initOrderInformation() {
+      return await fetch(`api/order/details/${this.orderId}`, {
+        method: "GET",
+        credentials: 'include',
+      })
+          .then(res => res.json())
+          .then(res => {
+            console.log('get details', res)
+            this.formData = res;
+            return {
+              isOk: true,
+              data: this.formData
+            };
+          })
+          .catch(c => {
+            console.log(c)
+            return {
+              isOk: false
+            };
+          });
+    },
     changeService: function (serviceId) {
       this.formData.serviceTypeId = serviceId;
     },
-    
+
     cancel: function () {
       this.$emit('update:visible', false);
     },
