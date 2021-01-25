@@ -1,7 +1,6 @@
 ﻿using System;
 using AutoMapper;
 using LogisticService.Application.Common.Mappings;
-using LogisticService.Application.Feature.Order.Queries.GetOrdersByUserId;
 using LogisticService.Core.Enums;
 
 namespace LogisticService.Application.Feature.Order.Queries.GetAllOrders

@@ -3,7 +3,7 @@ using AutoMapper;
 using LogisticService.Application.Common.Mappings;
 using LogisticService.Core.Enums;
 
-namespace LogisticService.Application.Feature.Order.Queries.GetOrdersByUserId
+namespace LogisticService.Application.Feature.Order.Queries.GetCurrentUserOrders
 {
     public class OrdersDto : IMapFrom<Core.Entities.Order>
     {

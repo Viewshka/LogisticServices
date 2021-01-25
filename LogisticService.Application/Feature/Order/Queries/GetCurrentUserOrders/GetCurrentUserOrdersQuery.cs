@@ -6,7 +6,6 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using LogisticService.Application.Common.Access;
 using LogisticService.Application.Common.Interfaces;
-using LogisticService.Application.Feature.Order.Queries.GetOrdersByUserId;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

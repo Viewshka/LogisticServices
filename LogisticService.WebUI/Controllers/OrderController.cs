@@ -7,6 +7,7 @@ using LogisticService.Application.Feature.Order.Commands.Delete;
 using LogisticService.Application.Feature.Order.Commands.Update;
 using LogisticService.Application.Feature.Order.Queries.GetAllOrders;
 using LogisticService.Application.Feature.Order.Queries.GetCurrentUserOrders;
+using LogisticService.Application.Feature.Order.Queries.GetOrderDetail;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,6 +35,12 @@ namespace LogisticService.WebUI.Controllers
                 : DataSourceLoader.Load(await Mediator.Send(new GetAllOrdersQuery()), loadOptions));
         }
 
+        [HttpGet("details/{orderId}")]
+        public async Task<IActionResult> GetDetailsOrderAsync(int orderId)
+        {
+            return Ok(await Mediator.Send(new GetOrderDetailQuery {OrderId = orderId}));
+        }
+        
         [HttpPost]
         public async Task<IActionResult> AddOrderAsync(CreateOrderCommand command)
             => Ok(await Mediator.Send(command));
