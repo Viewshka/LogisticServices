@@ -3,7 +3,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using LogisticService.Application.Common.Access;
 using LogisticService.Application.Common.Interfaces;
+using LogisticService.Core.Entities.Identity;
+using LogisticService.Core.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace LogisticService.Application.Feature.User.Queries.GetCurrentUser
@@ -25,6 +28,16 @@ namespace LogisticService.Application.Feature.User.Queries.GetCurrentUser
 
         public async Task<CurrentUserDto> Handle(GetCurrentUserQuery request, CancellationToken cancellationToken)
         {
+            var roles = await _context.UserRoles
+                .Where(role => role.UserId == _currentUserService.UserId)
+                .AsNoTracking()
+                .Select(role=>new RoleDto
+                {
+                    Id = role.RoleId,
+                    Name = ((RolesEnum) role.RoleId).ToString()
+                })
+                .ToListAsync(cancellationToken);
+
             return await _context.Users
                 .Where(user => user.Id == _currentUserService.UserId)
                 .AsNoTracking()
@@ -33,7 +46,8 @@ namespace LogisticService.Application.Feature.User.Queries.GetCurrentUser
                     UserId = user.Id,
                     UserName = user.UserName,
                     Email = user.Email,
-                    IsAuthenticated = _currentUserService.IsAuthenticated
+                    IsAuthenticated = _currentUserService.IsAuthenticated,
+                    Roles = roles
                 })
                 .FirstOrDefaultAsync(cancellationToken);
         }

@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using LogisticService.Application.Common.Access;
+using LogisticService.Core.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,7 +30,8 @@ namespace LogisticService.Application.Feature.Order.Commands.ClientIsRemoveOrder
             if (entity == null) throw new Exception("Заказа не существует");
 
             entity.IsRemove = true;
-
+            entity.Status = StatusEnum.Отменен;
+            
             await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }

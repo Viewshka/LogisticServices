@@ -55,7 +55,7 @@ namespace LogisticService.WebUI.Controllers
 
         [Authorize(Roles = "Manager")]
         [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> UpdateOrderAsync(int id)
+        public async Task<IActionResult> DeleteOrderAsync(int id)
         {
             await Mediator.Send(new DeleteOrderCommand {Id = id});
             return NoContent();

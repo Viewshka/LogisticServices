@@ -56,7 +56,7 @@ namespace LogisticService.Application.Feature.Order.Commands.Create
             var entity = new Core.Entities.Order
             {
                 Number = number,
-                Status = StatusEnum.Отправлен,
+                Status = StatusEnum.ВОбработке,
                 UserId = _currentUserService.UserId,
 
                 StartPoint = request.StartPoint,

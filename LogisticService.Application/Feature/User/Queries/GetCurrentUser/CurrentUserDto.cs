@@ -1,4 +1,6 @@
-﻿namespace LogisticService.Application.Feature.User.Queries.GetCurrentUser
+﻿using System.Collections.Generic;
+
+namespace LogisticService.Application.Feature.User.Queries.GetCurrentUser
 {
     public class CurrentUserDto
     {
@@ -8,5 +10,7 @@
         public string Email { get; set; }
 
         public bool IsAuthenticated { get; set; }
+
+        public IEnumerable<RoleDto> Roles { get; set; }
     }
 }
