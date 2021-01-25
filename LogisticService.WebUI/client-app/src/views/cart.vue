@@ -88,8 +88,14 @@
       <template #buttonControl="{data}">
         <div class="dx-command-edit dx-command-edit-with-icons">
           <a href="#"
-             class="dx-link dx-icon-search dx-link-icon"
-             title="Отследить"
+             class="dx-link dx-icon-upload dx-link-icon"
+             title="Взять заказ"
+             v-on:click="takeOrder(data.data.id)"
+          ></a>
+
+          <a href="#"
+             class="dx-link dx-icon-edit dx-link-icon"
+             title="Отредактировать"
              v-on:click="navigateToOrder(data.data.id)"
           ></a>
 
@@ -133,6 +139,7 @@
       <template #buttonInsertContractTemplate={data}>
         <DxButton
             hint="Добавить новый заказ"
+            text="Добавить заказ"
             type="normal"
             icon="plus"
             @click="insert"
@@ -239,6 +246,21 @@ export default {
     };
   },
   methods: {
+    takeOrder(id) {
+      console.log(id)
+      confirm(`Вы уверены, что хотите взять заказ?`, "Удаление")
+          .then((dialogResult) => {
+            if (dialogResult) {
+              axios.post(`/api/order/take-order/`, {orderId: id})
+                  .then(() => {
+                    this.refreshDataGrid();
+                  })
+                  .catch(reason => {
+                    console.log(reason)
+                  });
+            }
+          });
+    },
     navigateToOrder(id) {
       console.log(id)
       this.formDataOrderDetails.orderId = id;
