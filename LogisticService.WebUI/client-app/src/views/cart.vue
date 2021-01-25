@@ -125,7 +125,7 @@
           :enabled="true"
           type="localStorage"
           :saving-timeout="0"
-          storage-key="awdawdadsasczdvsv"
+          storage-key="awdawdфцвфцвфцвadsasczdvsv"
       />
       <DxSummary>
         <DxGroupItem summary-type="count"/>
@@ -232,10 +232,10 @@ export default {
       dataSourceUsers,
       dataSourceServices,
       dataSourceStatuses: [
-        {name: 'Отправлен', id: 1},
-        {name: 'ПереданНаКомплектацию', id: 2},
+        {name: 'В обработке', id: 1},
+        {name: 'Передан На Комплектацию', id: 2},
         {name: 'Готов', id: 3},
-        {name: 'Доставка', id: 4},
+        {name: 'Выполняется доставка', id: 4},
         {name: 'Завершен', id: 5},
         {name: 'Отменен', id: 6}
       ],
@@ -261,10 +261,10 @@ export default {
     };
   },
   methods: {
-    canTakeOrder(order){
+    canTakeOrder(order) {
       return auth.hasCourierRole() && !order.courierId
     },
-    canDeclineOrder(order){
+    canDeclineOrder(order) {
       return auth.hasCourierRole() && order.courierId === auth._user.userId
     },
 
