@@ -24,13 +24,14 @@
           <DxSimpleItem
               :col-span="1"
               :label="{text: 'Откуда доставляем'}"
-              :editorOptions="{disabled: true}"
+              :editorOptions="{disabled:!isManager}"
               data-field="startPoint"
               editor-type="dxTextBox"
           />
           <DxSimpleItem
               :col-span="1"
               :label="{text: 'Куда доставляем'}"
+              :editorOptions="{disabled:!isManager}"
               data-field="endPoint"
               editor-type="dxTextBox"
           />
@@ -45,7 +46,7 @@
         <template #dropDownServiceEditor="{ data }">
           <DropDownServiceSelect
               :value="formData[data.dataField]"
-              :disabled="true"
+              :disabled="!isManager"
               :on-value-changed="changeService"
           />
         </template>
@@ -94,9 +95,9 @@
               </DxColumn>
 
               <DxEditing
-                  :allow-updating="false"
-                  :allow-deleting="false"
-                  :allow-adding="false"
+                  :allow-updating="isManager"
+                  :allow-deleting="isManager"
+                  :allow-adding="isManager"
                   mode="cell"
               />
             </DxDataGrid>
@@ -126,6 +127,7 @@
 
 <script>
 import notify from 'devextreme/ui/notify'
+import auth from "../auth";
 import {DxPopup} from "devextreme-vue/popup";
 import {DxButtonItem, DxForm, DxGroupItem, DxSimpleItem} from "devextreme-vue/form";
 import DxDataGrid, {DxEditing, DxColumn, DxValidationRule, DxLookup} from 'devextreme-vue/data-grid';
@@ -161,6 +163,7 @@ export default {
     return {
       popupVisible: false,
       formRefName: 'form',
+      isManager: false,
 
       formData: {},
       localDataSource: [],
@@ -170,6 +173,7 @@ export default {
   watch: {
     visible: async function (isVisible) {
       if (isVisible) {
+        this.isManager = auth.hasManagerRole()
         await this.initOrderInformation()
       }
     },
