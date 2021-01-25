@@ -62,6 +62,13 @@
         <DxLookup :data-source="dataSourceUsers" value-expr="id" display-expr="userName"/>
       </DxColumn>
       <DxColumn
+          data-field="courierId"
+          caption="Курьер"
+          :hiding-priority="8"
+      >
+        <DxLookup :data-source="dataSourceUsers" value-expr="id" display-expr="userName"/>
+      </DxColumn>
+      <DxColumn
           data-field="serviceTypeId"
           caption="Тип услуги"
           :hiding-priority="8"
