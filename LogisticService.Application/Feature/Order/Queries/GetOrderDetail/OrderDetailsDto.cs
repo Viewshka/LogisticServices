@@ -53,6 +53,8 @@ namespace LogisticService.Application.Feature.Order.Queries.GetOrderDetail
         /// <example>Курьерская доставка</example>
         public int ServiceTypeId { get; set; }
 
+        public int? CourierId { get; set; }
+        public string Reason { get; set; }
         public IEnumerable<OrderStructureDto> OrderStructures { get; set; }
 
         public void Mapping(Profile profile)

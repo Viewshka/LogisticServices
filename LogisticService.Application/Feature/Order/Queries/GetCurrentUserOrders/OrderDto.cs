@@ -5,14 +5,14 @@ using LogisticService.Core.Enums;
 
 namespace LogisticService.Application.Feature.Order.Queries.GetCurrentUserOrders
 {
-    public class OrdersDto : IMapFrom<Core.Entities.Order>
+    public class OrderDto : IMapFrom<Core.Entities.Order>
     {
         public int Id { get; set; }
 
         public string Number { get; set; }
 
         public float? TotalCost { get; set; }
-        
+
         /// <summary>
         /// Адресс, откуда надо забрать
         /// </summary>
@@ -27,7 +27,7 @@ namespace LogisticService.Application.Feature.Order.Queries.GetCurrentUserOrders
         /// Дата, с
         /// </summary>
         public DateTime? DateFrom { get; set; }
-        
+
         /// <summary>
         /// Дата, по
         /// </summary>
@@ -50,10 +50,14 @@ namespace LogisticService.Application.Feature.Order.Queries.GetCurrentUserOrders
         /// </summary>
         /// <example>Курьерская доставка</example>
         public int ServiceTypeId { get; set; }
-        
+
+        public int? CourierId { get; set; }
+        public string Reason { get; set; }
+
+
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<Core.Entities.Order,OrdersDto>();
+            profile.CreateMap<Core.Entities.Order, OrderDto>();
         }
     }
 }

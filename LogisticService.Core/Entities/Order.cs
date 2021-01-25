@@ -15,7 +15,7 @@ namespace LogisticService.Core.Entities
         public int Number { get; set; }
 
         public float? TotalCost { get; set; }
-        
+
         /// <summary>
         /// Адресс, откуда надо забрать
         /// </summary>
@@ -30,7 +30,7 @@ namespace LogisticService.Core.Entities
         /// Дата, с
         /// </summary>
         public DateTime? DateFrom { get; set; }
-        
+
         /// <summary>
         /// Дата, по
         /// </summary>
@@ -47,6 +47,7 @@ namespace LogisticService.Core.Entities
         /// Заказчик (клиент)
         /// </summary>
         public int UserId { get; set; }
+
         public ApplicationUser User { get; set; }
 
         /// <summary>
@@ -54,10 +55,16 @@ namespace LogisticService.Core.Entities
         /// </summary>
         /// <example>Курьерская доставка</example>
         public int ServiceTypeId { get; set; }
+
         public ServiceType ServiceType { get; set; }
 
         public bool IsRemove { get; set; }
-        
+
+        public int? CourierId { get; set; }
+        public ApplicationUser Courier { get; set; }
+
+        public string Reason { get; set; }
+
         /// <summary>
         /// Состав заказа
         /// </summary>

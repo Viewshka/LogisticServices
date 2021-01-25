@@ -3,7 +3,7 @@ using AutoMapper;
 using LogisticService.Application.Common.Mappings;
 using LogisticService.Core.Enums;
 
-namespace LogisticService.Application.Feature.Order.Queries.GetAllOrders
+namespace LogisticService.Application.Feature.Order.Queries.GetOrdersForCourier
 {
     public class OrderDto : IMapFrom<Core.Entities.Order>
     {
@@ -12,7 +12,7 @@ namespace LogisticService.Application.Feature.Order.Queries.GetAllOrders
         public string Number { get; set; }
 
         public float? TotalCost { get; set; }
-
+        
         /// <summary>
         /// Адресс, откуда надо забрать
         /// </summary>
@@ -27,7 +27,7 @@ namespace LogisticService.Application.Feature.Order.Queries.GetAllOrders
         /// Дата, с
         /// </summary>
         public DateTime? DateFrom { get; set; }
-
+        
         /// <summary>
         /// Дата, по
         /// </summary>
@@ -50,13 +50,14 @@ namespace LogisticService.Application.Feature.Order.Queries.GetAllOrders
         /// </summary>
         /// <example>Курьерская доставка</example>
         public int ServiceTypeId { get; set; }
-
+        
         public int? CourierId { get; set; }
+
         public string Reason { get; set; }
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<Core.Entities.Order, OrderDto>();
+            profile.CreateMap<Core.Entities.Order,OrderDto>();
         }
     }
 }

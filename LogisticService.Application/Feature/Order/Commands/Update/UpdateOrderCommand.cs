@@ -37,6 +37,8 @@ namespace LogisticService.Application.Feature.Order.Commands.Update
 
         public int ServiceTypeId { get; set; }
 
+        public int? CourierId { get; set; }
+        
         public IEnumerable<Create.OrderStructureDto> OrderStructures { get; set; }
     }
 
@@ -69,6 +71,7 @@ namespace LogisticService.Application.Feature.Order.Commands.Update
                     Product = orderStr.Product,
                     UnitId = orderStr.UnitId
                 }).ToList();
+            entity.CourierId = request.CourierId;
 
             await _context.SaveChangesAsync(cancellationToken);
             

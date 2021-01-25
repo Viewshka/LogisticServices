@@ -1,13 +1,16 @@
 ﻿using System.Threading.Tasks;
 using DevExtreme.AspNet.Data;
 using LogisticService.Application.Common;
+using LogisticService.Application.Feature.Order.Commands.CancelOrder;
 using LogisticService.Application.Feature.Order.Commands.ClientIsRemoveOrder;
 using LogisticService.Application.Feature.Order.Commands.Create;
 using LogisticService.Application.Feature.Order.Commands.Delete;
+using LogisticService.Application.Feature.Order.Commands.TakeOrder;
 using LogisticService.Application.Feature.Order.Commands.Update;
 using LogisticService.Application.Feature.Order.Queries.GetAllOrders;
 using LogisticService.Application.Feature.Order.Queries.GetCurrentUserOrders;
 using LogisticService.Application.Feature.Order.Queries.GetOrderDetail;
+using LogisticService.Application.Feature.Order.Queries.GetOrdersForCourier;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,9 +33,11 @@ namespace LogisticService.WebUI.Controllers
         {
             loadOptions.RequireTotalCount = true;
 
-            return Ok(HttpContext.User.IsInRole("Client") 
-                ? DataSourceLoader.Load(await Mediator.Send(new GetCurrentUserOrdersQuery()), loadOptions) 
-                : DataSourceLoader.Load(await Mediator.Send(new GetAllOrdersQuery()), loadOptions));
+            return Ok(HttpContext.User.IsInRole("Manager")
+                ? DataSourceLoader.Load(await Mediator.Send(new GetAllOrdersQuery()), loadOptions)
+                : HttpContext.User.IsInRole("Courier")
+                    ? DataSourceLoader.Load(await Mediator.Send(new GetOrdersForCourierQuery()), loadOptions)
+                    : DataSourceLoader.Load(await Mediator.Send(new GetCurrentUserOrdersQuery()), loadOptions));
         }
 
         [HttpGet("details/{orderId}")]
@@ -40,11 +45,19 @@ namespace LogisticService.WebUI.Controllers
         {
             return Ok(await Mediator.Send(new GetOrderDetailQuery {OrderId = orderId}));
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> AddOrderAsync(CreateOrderCommand command)
             => Ok(await Mediator.Send(command));
 
+        [HttpPost("take-order")]
+        public async Task<IActionResult> TakeOrderAsync(TakeOrderCommand command)
+            => Ok(await Mediator.Send(command));
+
+        [HttpPost("cancel-order")]
+        public async Task<IActionResult> CancelOrderAsync(CancelOrderCommand command)
+            => Ok(await Mediator.Send(command));
+        
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateOrderAsync(int id, UpdateOrderCommand command)
         {

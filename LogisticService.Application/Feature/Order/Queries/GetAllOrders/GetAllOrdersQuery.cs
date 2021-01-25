@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LogisticService.Application.Feature.Order.Queries.GetAllOrders
 {
-    public class GetAllOrdersQuery : IRequest<IEnumerable<AllOrdersDto>>
+    public class GetAllOrdersQuery : IRequest<IEnumerable<OrderDto>>
     {
     }
 
-    public class GetAllOrdersQueryHandler : IRequestHandler<GetAllOrdersQuery, IEnumerable<AllOrdersDto>>
+    public class GetAllOrdersQueryHandler : IRequestHandler<GetAllOrdersQuery, IEnumerable<OrderDto>>
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -24,11 +24,11 @@ namespace LogisticService.Application.Feature.Order.Queries.GetAllOrders
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<AllOrdersDto>> Handle(GetAllOrdersQuery request,
+        public async Task<IEnumerable<OrderDto>> Handle(GetAllOrdersQuery request,
             CancellationToken cancellationToken)
         {
             return await _context.Orders
-                .ProjectTo<AllOrdersDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<OrderDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
         }
