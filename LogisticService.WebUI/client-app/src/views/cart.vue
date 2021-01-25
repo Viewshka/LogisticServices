@@ -77,7 +77,7 @@
       </DxColumn>
       <DxColumn
           data-field="status"
-          caption="Статут"
+          caption="Статус"
           :hiding-priority="8"
       >
         <DxLookup :data-source="dataSourceStatuses" value-expr="id" display-expr="name"/>
@@ -101,10 +101,10 @@
              v-on:click="takeOrder(data.data.id)"
           ></a>
           <a href="#"
-             v-if="canDeclineOrder(data.data)"
+             v-if="canCancelOrder(data.data)"
              class="dx-link dx-icon-isnotblank dx-link-icon"
              title="Отменить заказ"
-             v-on:click="declineOrder(data.data.id)"
+             v-on:click="cancelOrder(data.data.id)"
           ></a>
 
           <a href="#"
@@ -114,6 +114,7 @@
           ></a>
 
           <a href="#"
+             v-if="canDeleteOrder(data.data)"
              class="dx-link dx-icon-trash dx-link-icon"
              title="Удалить заказ"
              v-on:click="deleteOrder(data.data)"
@@ -264,16 +265,19 @@ export default {
     canTakeOrder(order) {
       return auth.hasCourierRole() && !order.courierId
     },
-    canDeclineOrder(order) {
+    canCancelOrder(order) {
       return auth.hasCourierRole() && order.courierId === auth._user.userId
     },
+    canDeleteOrder(order) {
+      return (order.userId === auth._user.userId) && order.status === this.dataSourceStatuses[0].id
+    },
 
-    declineOrder(id) {
+    cancelOrder(id) {
       console.log(id)
       confirm(`Вы уверены, что хотите отказаться заказ?`, "Отказ от заказа")
           .then((dialogResult) => {
             if (dialogResult) {
-              axios.post(`/api/order/take-order/`, {orderId: id})
+              axios.post(`/api/order/cancel-order/`, {orderId: id})
                   .then(() => {
                     this.refreshDataGrid();
                   })
