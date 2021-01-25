@@ -3,7 +3,7 @@
       height="auto"
       :width="728"
       position="center"
-      title="Форма поиска заказов"
+      title="Форма поиска заказа"
       :show-title="true"
       :resize-enabled="true"
       :visible="visible"
