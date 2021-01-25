@@ -23,12 +23,15 @@ namespace LogisticService.WebUI.Controllers
             return Ok(DataSourceLoader.Load(await Mediator.Send(new GetAllOrdersQuery()), loadOptions));
         }
 
-        [Authorize(Roles = "Client")]
+        [Authorize(Roles = "Manager,Courier,Client")]
         [HttpGet("current-user-orders")]
         public async Task<IActionResult> GetCurrentUserOrdersAsync(DataSourceLoadOptions loadOptions)
         {
             loadOptions.RequireTotalCount = true;
-            return Ok(DataSourceLoader.Load(await Mediator.Send(new GetCurrentUserOrdersQuery()), loadOptions));
+
+            return Ok(HttpContext.User.IsInRole("Client") 
+                ? DataSourceLoader.Load(await Mediator.Send(new GetCurrentUserOrdersQuery()), loadOptions) 
+                : DataSourceLoader.Load(await Mediator.Send(new GetAllOrdersQuery()), loadOptions));
         }
 
         [HttpPost]
