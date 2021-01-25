@@ -95,9 +95,16 @@
       <template #buttonControl="{data}">
         <div class="dx-command-edit dx-command-edit-with-icons">
           <a href="#"
-             class="dx-link dx-icon-upload dx-link-icon"
+             v-if="canTakeOrder(data.data)"
+             class="dx-link dx-icon-isblank dx-link-icon"
              title="Взять заказ"
              v-on:click="takeOrder(data.data.id)"
+          ></a>
+          <a href="#"
+             v-if="canDeclineOrder(data.data)"
+             class="dx-link dx-icon-isnotblank dx-link-icon"
+             title="Отменить заказ"
+             v-on:click="declineOrder(data.data.id)"
           ></a>
 
           <a href="#"
@@ -188,6 +195,7 @@ import DxDataGrid, {
 } from "devextreme-vue/data-grid";
 
 import notify from "devextreme/ui/notify";
+import auth from "../auth";
 import {confirm,} from 'devextreme/ui/dialog';
 import * as AspNetData from "devextreme-aspnet-data-nojquery";
 import OrderCreateForm from "../components/order-create-form";
@@ -253,9 +261,31 @@ export default {
     };
   },
   methods: {
+    canTakeOrder(order){
+      return auth.hasCourierRole() && !order.courierId
+    },
+    canDeclineOrder(order){
+      return auth.hasCourierRole() && order.courierId === auth._user.userId
+    },
+
+    declineOrder(id) {
+      console.log(id)
+      confirm(`Вы уверены, что хотите отказаться заказ?`, "Отказ от заказа")
+          .then((dialogResult) => {
+            if (dialogResult) {
+              axios.post(`/api/order/take-order/`, {orderId: id})
+                  .then(() => {
+                    this.refreshDataGrid();
+                  })
+                  .catch(reason => {
+                    console.log(reason)
+                  });
+            }
+          });
+    },
     takeOrder(id) {
       console.log(id)
-      confirm(`Вы уверены, что хотите взять заказ?`, "Удаление")
+      confirm(`Вы уверены, что хотите взять заказ?`, "Принятие заказа")
           .then((dialogResult) => {
             if (dialogResult) {
               axios.post(`/api/order/take-order/`, {orderId: id})
