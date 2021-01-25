@@ -15,6 +15,8 @@ namespace LogisticService.Application.Common.Access
         public DbSet<ServiceType> ServiceTypes { get; set; }
         public DbSet<Unit> Units { get; set; }
 
+        public DbSet<Feedback> Feedbacks { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
