@@ -1,24 +1,74 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
 using LogisticService.Application.Common.Mappings;
-using LogisticService.Core.Entities;
+using LogisticService.Core.Enums;
 
 namespace LogisticService.Application.Feature.Order.Queries.GetOrderDetail
 {
-    public class OrderDetailsDto : IMapFrom<OrderStructure>
+    public class OrderDetailsDto : IMapFrom<Core.Entities.Order>
     {
         public int Id { get; set; }
 
-        public int Count { get; set; }
-        
-        public string Product { get; set; }
+        public string Number { get; set; }
 
-        public int OrderId { get; set; }
+        public float? TotalCost { get; set; }
 
-        public int UnitId { get; set; }
+        /// <summary>
+        /// Адресс, откуда надо забрать
+        /// </summary>
+        public string StartPoint { get; set; }
+
+        /// <summary>
+        /// Адресс, куда надо доставить
+        /// </summary>
+        public string EndPoint { get; set; }
+
+        /// <summary>
+        /// Дата, с
+        /// </summary>
+        public DateTime? DateFrom { get; set; }
+
+        /// <summary>
+        /// Дата, по
+        /// </summary>
+        public DateTime? DateTo { get; set; }
+
+        /// <summary>
+        /// Фактическая дата завершения заказа
+        /// </summary>
+        public DateTime? DateFinish { get; set; }
+
+        public StatusEnum Status { get; set; }
+
+        /// <summary>
+        /// Заказчик (клиент)
+        /// </summary>
+        public int UserId { get; set; }
+
+        /// <summary>
+        /// Тип услуги
+        /// </summary>
+        /// <example>Курьерская доставка</example>
+        public int ServiceTypeId { get; set; }
+
+        public IEnumerable<OrderStructureDto> OrderStructures { get; set; }
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<OrderStructure, OrderDetailsDto>();
+            profile.CreateMap<Core.Entities.Order, OrderDetailsDto>()
+                .ForMember(f => f.OrderStructures,
+                    opt
+                        => opt.MapFrom(order => order.OrderStructures
+                            .Select(structure => new OrderStructureDto
+                            {
+                                Id = structure.Id,
+                                Count = structure.Count,
+                                Product = structure.Product,
+                                OrderId = structure.OrderId,
+                                UnitId = structure.UnitId
+                            })));
         }
     }
 }
