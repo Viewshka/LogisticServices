@@ -108,6 +108,26 @@
           ></a>
 
           <a href="#"
+             v-if="canApproveOrder(data.data)"
+             class="dx-link dx-icon-box dx-link-icon"
+             title="Утвердить заказ"
+             v-on:click="approveOrder(data.data.id)"
+          ></a>
+          <a href="#"
+             v-if="canSendOrder(data.data)"
+             class="dx-link dx-icon-activefolder dx-link-icon"
+             title="Передать на комплектацию"
+             v-on:click="sendOrder(data.data.id)"
+          ></a>
+
+          <a href="#"
+             v-if="canCompleteOrder(data.data)"
+             class="dx-link dx-icon-todo dx-link-icon"
+             title="Завершить заказ"
+             v-on:click="completeOrder(data.data.id)"
+          ></a>
+
+          <a href="#"
              class="dx-link dx-icon-edit dx-link-icon"
              title="Отредактировать"
              v-on:click="navigateToOrder(data.data.id)"
@@ -263,13 +283,74 @@ export default {
   },
   methods: {
     canTakeOrder(order) {
-      return auth.hasCourierRole() && !order.courierId
+      return auth.hasCourierRole() && !order.courierId  && order.status <= this.dataSourceStatuses[2].id
     },
     canCancelOrder(order) {
-      return auth.hasCourierRole() && order.courierId === auth._user.userId
+      return auth.hasCourierRole() && order.courierId === auth._user.userId  && order.status === this.dataSourceStatuses[3].id
     },
     canDeleteOrder(order) {
       return (order.userId === auth._user.userId) && order.status === this.dataSourceStatuses[0].id
+    },
+
+
+    canSendOrder(order) {
+      return auth.hasManagerRole() && order.status ===  this.dataSourceStatuses[0].id
+    },
+    
+    canApproveOrder(order) {
+      return auth.hasManagerRole() && order.status ===  this.dataSourceStatuses[1].id
+    },
+
+    canCompleteOrder(order) {
+      return auth.hasCourierRole() && order.courierId === auth._user.userId && order.status === this.dataSourceStatuses[3].id
+    },
+
+    sendOrder(id) {
+      console.log(id)
+      confirm(`Вы уверены, что хотите передать на комплектацию заказ?`, "Отправка заказа")
+          .then((dialogResult) => {
+            if (dialogResult) {
+              axios.put(`/api/order/${id}/send/`, {orderId: id})
+                  .then(() => {
+                    this.refreshDataGrid();
+                  })
+                  .catch(reason => {
+                    console.log(reason)
+                  });
+            }
+          });
+    },
+
+    approveOrder(id) {
+      console.log(id)
+      confirm(`Вы уверены, что хотите утвердить заказ?  \n Курьерам станет доступен заказ для доставки`, "Утверждение заказа")
+          .then((dialogResult) => {
+            if (dialogResult) {
+              axios.put(`/api/order/${id}/approve/`, {orderId: id})
+                  .then(() => {
+                    this.refreshDataGrid();
+                  })
+                  .catch(reason => {
+                    console.log(reason)
+                  });
+            }
+          });
+    },
+
+    completeOrder(id) {
+      console.log(id)
+      confirm(`Вы уверены, что хотите завершить заказ?`, "Завершение заказа")
+          .then((dialogResult) => {
+            if (dialogResult) {
+              axios.put(`/api/order/${id}/completed/`, {orderId: id})
+                  .then(() => {
+                    this.refreshDataGrid();
+                  })
+                  .catch(reason => {
+                    console.log(reason)
+                  });
+            }
+          });
     },
 
     cancelOrder(id) {
