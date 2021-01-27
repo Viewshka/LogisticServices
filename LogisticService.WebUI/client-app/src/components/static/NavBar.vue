@@ -26,16 +26,67 @@
             @click="findOrder"
         />
       </DxItem>
-
+      <DxItem
+          locate-in-menu="auto"
+          location="before"
+      >
+        <DxButton
+            v-if="!hasManagerRole()"
+            icon="email"
+            styling-mode="text"
+            text="Обратная связь"
+            slot-scope="_"
+            @click="()=> {}"
+        />
+      </DxItem>
+      <DxItem
+          locate-in-menu="auto"
+          location="before"
+      >
+        <DxButton
+            v-if="user && hasManagerRole()"
+            icon="email"
+            styling-mode="text"
+            text="Обратная связь клиентов"
+            slot-scope="_"
+            @click="()=> $router.push('/feedback')"
+        />
+      </DxItem>
       <DxItem
           locate-in-menu="auto"
           location="after"
       >
         <DxButton
-            v-if="user"
+            v-if="user && hasUserRole()"
             icon="cart"
             styling-mode="text"
             text="Мои заказы"
+            slot-scope="_"
+            @click="()=> $router.push('/cart')"
+        />
+      </DxItem>
+      <DxItem
+          locate-in-menu="auto"
+          location="after"
+      >
+        <DxButton
+            v-if="user && hasCourierRole()"
+            icon="cart"
+            styling-mode="text"
+            text="Доступные заказы"
+            slot-scope="_"
+            @click="()=> $router.push('/cart')"
+        />
+      </DxItem>
+      <DxItem
+          locate-in-menu="auto"
+          location="after"
+      >
+        <DxButton
+            v-if="user && hasManagerRole()"
+            icon="cart"
+            styling-mode="text"
+            text="Все заказы"
             slot-scope="_"
             @click="()=> $router.push('/cart')"
         />
@@ -113,6 +164,15 @@ export default {
         path: "/login-form",
         query: {redirect: this.$route.path}
       });
+    },
+    hasCourierRole() {
+      return auth.hasCourierRole()
+    },
+    hasManagerRole() {
+      return auth.hasManagerRole()
+    },
+    hasUserRole() {
+      return auth.hasUserRole()
     },
   },
   computed: {

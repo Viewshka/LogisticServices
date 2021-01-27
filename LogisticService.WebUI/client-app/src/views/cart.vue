@@ -235,7 +235,7 @@ export default {
       dataSourceStatuses: [
         {name: 'В обработке', id: 1},
         {name: 'Передан На Комплектацию', id: 2},
-        {name: 'Готов', id: 3},
+        {name: 'Готов к доставке', id: 3},
         {name: 'Выполняется доставка', id: 4},
         {name: 'Завершен', id: 5},
         {name: 'Отменен', id: 6}

@@ -6,13 +6,13 @@ export default {
         return !!this._user;
     },
     hasManagerRole() {
-        return this._user.roles.some(role=>role.id===1);
+        return this._user!==null && this._user.roles.some(role => role.id === 1);
     },
     hasCourierRole() {
-        return this._user.roles.some(role=>role.id===3);
+        return this._user!==null && this._user.roles.some(role => role.id === 3);
     },
     hasUserRole() {
-        return this._user.roles.some(role=>role.id===2);
+        return this._user!==null && this._user.roles.some(role => role.id === 2);
     },
 
     async logIn(email, password) {
@@ -26,16 +26,16 @@ export default {
             body: JSON.stringify({userName: email, password: password, rememberMe: false})
         })
             .then((e) => {
-                if (e.ok){
+                if (e.ok) {
                     this._user = null;
                     return {
                         isOk: true,
-                    };  
+                    };
                 }
-                return e.text().then(text=>{
+                return e.text().then(text => {
                     return {
                         isOk: false,
-                        message: "Ошибка авторизации: "+text
+                        message: "Ошибка авторизации: " + text
                     };
                 })
 
@@ -150,7 +150,7 @@ export default {
                 return res.json().then(i => {
                     return {
                         isOk: false,
-                        message: "Ошибка регистрации" + i.flatMap(m=>m.description).join(', ')
+                        message: "Ошибка регистрации" + i.flatMap(m => m.description).join(', ')
                     };
                 })
             })

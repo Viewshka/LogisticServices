@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import cart from '../views/cart.vue'
+import feedback from '../views/feedback.vue'
 import simpleLayout from "../layouts/single-card";
 import login from "../views/login-form";
 import register from "../views/create-account-form";
@@ -25,6 +26,14 @@ const routes = [
     components: {
       layout: defaultLayout,
       content: cart
+    }
+  },
+  {
+    path: '/feedback',
+    name: 'feedback',
+    components: {
+      layout: defaultLayout,
+      content: feedback
     }
   },
   {
