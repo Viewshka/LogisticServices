@@ -1,4 +1,6 @@
 ﻿using System.Threading.Tasks;
+using LogisticService.Application.Feature.User.Commands.AddUserRole;
+using LogisticService.Application.Feature.User.Commands.DeleteUserRole;
 using LogisticService.Application.Feature.User.Queries.GetAllUsers;
 using LogisticService.Application.Feature.User.Queries.GetCurrentUser;
 using Microsoft.AspNetCore.Authorization;
@@ -23,6 +25,20 @@ namespace LogisticService.WebUI.Controllers
         public async Task<IActionResult> GetAllUser()
         {
             return Ok(await Mediator.Send(new GetAllUsersQuery()));
+        }
+
+        [HttpPost("add-role")]
+        public async Task<IActionResult> AddUserRoleAsync(AddUserRoleCommand command)
+        {
+            await Mediator.Send(command);
+            return NoContent();
+        }
+        
+        [HttpDelete("delete-role")]
+        public async Task<IActionResult> DeleteUserRoleAsync(DeleteUserRoleCommand command)
+        {
+            await Mediator.Send(command);
+            return NoContent();
         }
     }
 }
