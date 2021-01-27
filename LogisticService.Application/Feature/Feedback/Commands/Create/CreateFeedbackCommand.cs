@@ -31,13 +31,13 @@ namespace LogisticService.Application.Feature.Feedback.Commands.Create
             {
                 Message = request.Message,
                 Date = DateTime.Now,
-                UserId = _currentUserService.UserId,
+                UserId = _currentUserService.UserId == 0 ? (int?) null : _currentUserService.UserId,
                 Email = request.Email
             };
 
             await _context.Feedbacks.AddAsync(entity, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
-            
+
             return entity.Id;
         }
     }
