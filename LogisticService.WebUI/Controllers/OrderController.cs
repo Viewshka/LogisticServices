@@ -14,6 +14,7 @@ using LogisticService.Application.Feature.Order.Queries.GetAllOrders;
 using LogisticService.Application.Feature.Order.Queries.GetCurrentUserOrders;
 using LogisticService.Application.Feature.Order.Queries.GetOrderDetail;
 using LogisticService.Application.Feature.Order.Queries.GetOrdersForCourier;
+using LogisticService.Application.Feature.Order.Queries.TrackOrder;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -95,7 +96,7 @@ namespace LogisticService.WebUI.Controllers
             await Mediator.Send(new ApproveOrderCommand {Id = id});
             return NoContent();
         }
-        
+
         [Authorize(Roles = "Manager")]
         [HttpPut("{id}/send")]
         public async Task<IActionResult> SendOnKittingAsync(int id)
@@ -103,13 +104,19 @@ namespace LogisticService.WebUI.Controllers
             await Mediator.Send(new SendOnKittingCommand {Id = id});
             return NoContent();
         }
-        
+
         [HttpPut("{id}/completed")]
         public async Task<IActionResult> SetOrderCompletedStatusAsync(int id)
         {
             await Mediator.Send(new OrderCompletedCommand {Id = id});
             return NoContent();
         }
-        
+
+
+        [HttpGet("track-order-{number}")]
+        public async Task<IActionResult> TrackOrderAsync(int number)
+        {
+            return Ok(await Mediator.Send(new TrackOrderQuery {Number = number}));
+        }
     }
 }

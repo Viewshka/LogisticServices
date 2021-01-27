@@ -24,6 +24,8 @@ namespace LogisticService.Application.Common.Access
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Order>().HasIndex(order => order.Number).IsUnique();
+            
             builder.Entity<IdentityRole<int>>().HasData(new List<IdentityRole<int>>
             {
                 new IdentityRole<int>
