@@ -36,7 +36,7 @@
             styling-mode="text"
             text="Обратная связь"
             slot-scope="_"
-            @click="()=> {}"
+            @click="sendFeedBack"
         />
       </DxItem>
       <DxItem
@@ -120,6 +120,10 @@
     <OrderFindForm
         :visible.sync="orderFindFormVisible"
     />
+    <FeedbackForm
+        :visible.sync="feedbackFormVisible"
+        @submit="feedBackSubmit"
+    />
   </header>
 </template>
 
@@ -130,6 +134,8 @@ import DxScrollView from "devextreme-vue/scroll-view";
 import auth from "../../auth";
 import OrderFindForm from "../../components/order-find-form";
 import {mapState} from 'vuex';
+import FeedbackForm from "../feedback-form";
+import notify from "devextreme/ui/notify";
 
 export default {
   name: "NavBar",
@@ -141,6 +147,7 @@ export default {
     return {
       user: null,
       orderFindFormVisible: false,
+      feedbackFormVisible: false,
     }
   },
   created() {
@@ -149,7 +156,37 @@ export default {
   },
   methods: {
     findOrder() {
-      this.orderFindFormVisible=true
+      this.orderFindFormVisible = true
+    },
+    sendFeedBack() {
+      this.feedbackFormVisible = true
+    },
+    async feedBackSubmit(data) {
+      console.log(data)
+      let self = this;
+      return fetch('api/feedback/', {
+        method: "POST",
+        credentials: 'include',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+          .then((e) => {
+            if (e.ok) {
+              self.feedbackFormVisible = false;
+              notify('Спасибо за вашу обратную связь', "success", 2000);
+              return e.data;
+            }
+            notify('Ошибка отправки', "error", 2000);
+          }).catch(c => {
+            console.log(c)
+            return {
+              isOk: false,
+              message: "Ошибка"
+            };
+          });
     },
     async logIn(e) {
       console.log('login click')
@@ -179,6 +216,7 @@ export default {
     // ...mapState(['currentUser',]),
   },
   components: {
+    FeedbackForm,
     DxToolbar,
     DxItem,
     DxScrollView,
