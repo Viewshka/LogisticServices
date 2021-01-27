@@ -10,6 +10,8 @@ namespace LogisticService.Application.Feature.Feedback.Commands.Create
     public class CreateFeedbackCommand : IRequest<int>
     {
         public string Message { get; set; }
+
+        public string Email { get; set; }
     }
 
     public class CreateFeedbackCommandHandler : IRequestHandler<CreateFeedbackCommand, int>
@@ -29,7 +31,8 @@ namespace LogisticService.Application.Feature.Feedback.Commands.Create
             {
                 Message = request.Message,
                 Date = DateTime.Now,
-                UserId = _currentUserService.UserId
+                UserId = _currentUserService.UserId,
+                Email = request.Email
             };
 
             await _context.Feedbacks.AddAsync(entity, cancellationToken);

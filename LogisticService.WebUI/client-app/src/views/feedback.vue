@@ -29,7 +29,7 @@
           :visible="false"
       />
       <DxColumn
-          data-field="startPoint"
+          data-field="message"
           caption="Комментарий"
           :hiding-priority="8"
       />
