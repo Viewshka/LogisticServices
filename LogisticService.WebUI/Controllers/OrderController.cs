@@ -1,10 +1,13 @@
 ﻿using System.Threading.Tasks;
 using DevExtreme.AspNet.Data;
 using LogisticService.Application.Common;
+using LogisticService.Application.Feature.Order.Commands.ApproveOrder;
 using LogisticService.Application.Feature.Order.Commands.CancelOrder;
 using LogisticService.Application.Feature.Order.Commands.ClientIsRemoveOrder;
 using LogisticService.Application.Feature.Order.Commands.Create;
 using LogisticService.Application.Feature.Order.Commands.Delete;
+using LogisticService.Application.Feature.Order.Commands.OrderCompleted;
+using LogisticService.Application.Feature.Order.Commands.SendOnKitting;
 using LogisticService.Application.Feature.Order.Commands.TakeOrder;
 using LogisticService.Application.Feature.Order.Commands.Update;
 using LogisticService.Application.Feature.Order.Queries.GetAllOrders;
@@ -69,11 +72,11 @@ namespace LogisticService.WebUI.Controllers
         [HttpDelete("remove/{id}")]
         public async Task<IActionResult> RemoveOrderAsync(int id)
         {
-            if (HttpContext.User.IsInRole("Manager")) 
+            if (HttpContext.User.IsInRole("Manager"))
                 await Mediator.Send(new DeleteOrderCommand {Id = id});
-            else 
+            else
                 await Mediator.Send(new ClientIsRemoveOrderCommand {Id = id});
-            
+
             return NoContent();
         }
 
@@ -84,5 +87,29 @@ namespace LogisticService.WebUI.Controllers
             await Mediator.Send(new DeleteOrderCommand {Id = id});
             return NoContent();
         }
+
+        [Authorize(Roles = "Manager")]
+        [HttpPut("{id}/approve")]
+        public async Task<IActionResult> ApproveOrderAsync(int id)
+        {
+            await Mediator.Send(new ApproveOrderCommand {Id = id});
+            return NoContent();
+        }
+        
+        [Authorize(Roles = "Manager")]
+        [HttpPut("{id}/send")]
+        public async Task<IActionResult> SendOnKittingAsync(int id)
+        {
+            await Mediator.Send(new SendOnKittingCommand {Id = id});
+            return NoContent();
+        }
+        
+        [HttpPut("{id}/completed")]
+        public async Task<IActionResult> SetOrderCompletedStatusAsync(int id)
+        {
+            await Mediator.Send(new OrderCompletedCommand {Id = id});
+            return NoContent();
+        }
+        
     }
 }
