@@ -20,7 +20,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LogisticService.WebUI.Controllers
 {
-    [Authorize]
     public class OrderController : ApiController
     {
         [Authorize(Roles = "Manager,Courier")]
@@ -44,16 +43,19 @@ namespace LogisticService.WebUI.Controllers
                     : DataSourceLoader.Load(await Mediator.Send(new GetCurrentUserOrdersQuery()), loadOptions));
         }
 
+        [Authorize]
         [HttpGet("details/{orderId}")]
         public async Task<IActionResult> GetDetailsOrderAsync(int orderId)
         {
             return Ok(await Mediator.Send(new GetOrderDetailQuery {OrderId = orderId}));
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddOrderAsync(CreateOrderCommand command)
             => Ok(await Mediator.Send(command));
-
+        
+        [Authorize]
         [HttpPost("take-order")]
         public async Task<IActionResult> TakeOrderAsync(TakeOrderCommand command)
             => Ok(await Mediator.Send(command));
@@ -70,6 +72,7 @@ namespace LogisticService.WebUI.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpDelete("remove/{id}")]
         public async Task<IActionResult> RemoveOrderAsync(int id)
         {
@@ -105,6 +108,7 @@ namespace LogisticService.WebUI.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpPut("{id}/completed")]
         public async Task<IActionResult> SetOrderCompletedStatusAsync(int id)
         {

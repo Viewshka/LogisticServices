@@ -25,7 +25,9 @@ namespace LogisticService.Application.Feature.Order.Queries.TrackOrder
 
         public async Task<OrderDto> Handle(TrackOrderQuery request, CancellationToken cancellationToken)
         {
-            var entity = await _context.Orders
+            var maxProgress = Enum.GetValues(typeof(StatusEnum)).Length - 1;
+
+            return await _context.Orders
                 .Where(order => order.Number == request.Number)
                 .Select(order => new OrderDto
                 {
@@ -43,19 +45,14 @@ namespace LogisticService.Application.Feature.Order.Queries.TrackOrder
                     TotalCost = order.TotalCost,
                     ServiceTypeId = order.ServiceTypeId,
                     NameServiceType = order.ServiceType.Name,
+                    StatusName = order.Status.ToString(),
                     Progress = order.Status == StatusEnum.Отменен
                         ? 0
-                        : ComputedCurrentProgress(order.Status)
+                        : (int) order.Status,
+                    MaxProgress = maxProgress
                 })
                 .FirstOrDefaultAsync(cancellationToken);
-
-            return entity;
-        }
-
-        private static int ComputedCurrentProgress(StatusEnum currentStatus)
-        {
-            var totalCount = Enum.GetValues(typeof(StatusEnum)).Length - 1;
-            return (int) currentStatus * 100 / totalCount;
+            ;
         }
     }
 }

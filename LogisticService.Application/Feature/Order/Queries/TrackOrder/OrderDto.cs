@@ -18,11 +18,13 @@ namespace LogisticService.Application.Feature.Order.Queries.TrackOrder
         public string Username { get; set; }
         
         public int ServiceTypeId { get; set; }
+        public string StatusName { get; set; }
         public string NameServiceType { get; set; }
         
         public int? CourierId { get; set; }
         public string CourierName { get; set; }
 
         public int Progress { get; set; }
+        public int MaxProgress { get; set; }
     }
 }
