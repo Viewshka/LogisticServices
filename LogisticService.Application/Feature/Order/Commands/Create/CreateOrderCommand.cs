@@ -52,7 +52,10 @@ namespace LogisticService.Application.Feature.Order.Commands.Create
 
         public async Task<int> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
-            var number = await _context.Orders.MaxAsync(order => order.Number, cancellationToken)+1;
+            var number = await _context.Orders.AnyAsync(cancellationToken)
+                ? await _context.Orders.MaxAsync(order => order.Number, cancellationToken) + 1
+                : 1;
+
             var entity = new Core.Entities.Order
             {
                 Number = number,

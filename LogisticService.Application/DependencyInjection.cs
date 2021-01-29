@@ -21,10 +21,18 @@ namespace LogisticService.Application
         public static IServiceCollection AddInfrastructure(this IServiceCollection services,
             IConfiguration configuration)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
-                    i => i.MigrationsAssembly("LogisticService.WebUI")));
-            
+            if (configuration.GetValue<bool>("UseInMemoryDatabase"))
+            {
+                services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseInMemoryDatabase("LogisticService"));
+            }
+            else
+            {
+                services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                        i => i.MigrationsAssembly("LogisticService.WebUI")));
+            }
+
             return services;
         }
     }

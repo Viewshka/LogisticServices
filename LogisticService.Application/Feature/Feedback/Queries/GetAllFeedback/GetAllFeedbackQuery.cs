@@ -31,7 +31,7 @@ namespace LogisticService.Application.Feature.Feedback.Queries.GetAllFeedback
                     Id = feedback.Id,
                     Date = feedback.Date,
                     Message = feedback.Message,
-                    UserId = _currentUserService.UserId == 0 ? (int?) null : _currentUserService.UserId,
+                    UserId = feedback.UserId,
                     Email = feedback.Email
                 }));
         }
