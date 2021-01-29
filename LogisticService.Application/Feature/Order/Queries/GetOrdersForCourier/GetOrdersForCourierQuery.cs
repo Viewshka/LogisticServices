@@ -37,7 +37,9 @@ namespace LogisticService.Application.Feature.Order.Queries.GetOrdersForCourier
             return await _context.Orders
                 .Where(order => order.Status == StatusEnum.ГотовКДоставке
                                 ||
-                                order.CourierId == _currentUserService.UserId)
+                                order.CourierId == _currentUserService.UserId
+                                ||
+                                order.UserId == _currentUserService.UserId)
                 .ProjectTo<OrderDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
