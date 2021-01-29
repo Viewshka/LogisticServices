@@ -129,6 +129,7 @@ import {DxButtonItem, DxForm, DxGroupItem, DxSimpleItem} from "devextreme-vue/fo
 import DxDataGrid, {DxEditing, DxColumn, DxValidationRule, DxLookup} from 'devextreme-vue/data-grid';
 import * as AspNetData from "devextreme-aspnet-data-nojquery";
 import DropDownServiceSelect from "./ui/drop-down-service-select";
+import auth from "../auth";
 
 const dataSourceUnits = AspNetData.createStore({
   key: 'id',
@@ -147,6 +148,13 @@ export default {
     formData: {
       type: Object,
       required: true
+    },
+  },
+  watch: {
+    visible: async function (isVisible) {
+      if (isVisible) {
+        this.localDataSource = []
+      }
     },
   },
   computed: {
