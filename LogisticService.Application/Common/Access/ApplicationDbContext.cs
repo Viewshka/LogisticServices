@@ -25,7 +25,9 @@ namespace LogisticService.Application.Common.Access
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Order>().HasIndex(order => order.Number).IsUnique();
-            
+
+            var hasher = new PasswordHasher<ApplicationUser>();
+
             builder.Entity<IdentityRole<int>>().HasData(new List<IdentityRole<int>>
             {
                 new IdentityRole<int>
@@ -84,6 +86,59 @@ namespace LogisticService.Application.Common.Access
                     FullName = "Кубический метр",
                     ShortName = "куб. м",
                     Description = "Кубический метр"
+                }
+            });
+            
+            builder.Entity<ApplicationUser>().HasData(new List<ApplicationUser>
+            {
+                new ApplicationUser
+                {
+                    Id = 1,
+                    UserName = "Manager",
+                    NormalizedUserName = "Manager".ToUpper(),
+                    EmailConfirmed = true,
+                    PasswordHash = hasher.HashPassword(null, "manager"),
+                    LockoutEnabled = true,
+                    SecurityStamp = Guid.NewGuid().ToString("D"),
+                },
+                new ApplicationUser
+                {
+                    Id = 2,
+                    UserName = "Client",
+                    NormalizedUserName = "Client".ToUpper(),
+                    EmailConfirmed = true,
+                    PasswordHash = hasher.HashPassword(null, "client"),
+                    LockoutEnabled = true,
+                    SecurityStamp = Guid.NewGuid().ToString("D"),
+                },
+                new ApplicationUser
+                {
+                    Id = 3,
+                    UserName = "Courier",
+                    NormalizedUserName = "Courier".ToUpper(),
+                    EmailConfirmed = true,
+                    PasswordHash = hasher.HashPassword(null, "courier"),
+                    LockoutEnabled = true,
+                    SecurityStamp = Guid.NewGuid().ToString("D"),
+                }
+            });
+            
+            builder.Entity<IdentityUserRole<int>>().HasData(new List<IdentityUserRole<int>>
+            {
+                new IdentityUserRole<int>
+                {
+                    RoleId = 1,
+                    UserId = 1
+                },
+                new IdentityUserRole<int>
+                {
+                    RoleId = 2,
+                    UserId = 2
+                },
+                new IdentityUserRole<int>
+                {
+                    RoleId = 3,
+                    UserId = 3
                 }
             });
 
