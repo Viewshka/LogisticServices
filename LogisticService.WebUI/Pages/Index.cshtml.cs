@@ -7,6 +7,7 @@ using LogisticService.Core.Entities.Identity;
 using LogisticService.Core.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -35,12 +36,11 @@ namespace LogisticService.WebUI.Pages
 
         public async void OnGet()
         {
-            var flag = true;
+            var isExistRoles = await _context.Roles.AnyAsync();
 
-            if (flag && _configuration.GetValue<bool>("UseInMemoryDatabase"))
+            if (!isExistRoles && _configuration.GetValue<bool>("UseInMemoryDatabase"))
             {
                 await AddDataAsync();
-                flag = false;
             }
         }
 

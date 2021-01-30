@@ -54,6 +54,30 @@
       </DxItem>
       <DxItem
           locate-in-menu="auto"
+          location="before"
+      >
+        <DxButton
+            v-if="user && hasManagerRole()"
+            styling-mode="text"
+            text="Виды услуг"
+            slot-scope="_"
+            @click="openServiceTypeForm"
+        />
+      </DxItem>
+      <DxItem
+          locate-in-menu="auto"
+          location="before"
+      >
+        <DxButton
+            v-if="user && hasManagerRole()"
+            styling-mode="text"
+            text="Единицы измерения"
+            slot-scope="_"
+            @click="openUnitForm"
+        />
+      </DxItem>
+      <DxItem
+          locate-in-menu="auto"
           location="after"
       >
         <DxButton
@@ -124,6 +148,12 @@
         :visible.sync="feedbackFormVisible"
         @submit="feedBackSubmit"
     />
+    <ServiceTypeForm
+        :visible.sync="serviceTypeFormVisible"
+    />
+    <UnitForm
+      :visible.sync="unitFormVisible"
+    />
   </header>
 </template>
 
@@ -136,6 +166,8 @@ import OrderFindForm from "../../components/order-find-form";
 import {mapState} from 'vuex';
 import FeedbackForm from "../feedback-form";
 import notify from "devextreme/ui/notify";
+import ServiceTypeForm from '../service-type-form'
+import UnitForm from '../unit-form'
 
 export default {
   name: "NavBar",
@@ -148,6 +180,8 @@ export default {
       user: null,
       orderFindFormVisible: false,
       feedbackFormVisible: false,
+      serviceTypeFormVisible: false,
+      unitFormVisible: false,
     }
   },
   created() {
@@ -160,6 +194,12 @@ export default {
     },
     sendFeedBack() {
       this.feedbackFormVisible = true
+    },
+    openServiceTypeForm() {
+      this.serviceTypeFormVisible = true;
+    },
+    openUnitForm() {
+      this.unitFormVisible = true;
     },
     async feedBackSubmit(data) {
       console.log(data)
@@ -221,7 +261,9 @@ export default {
     DxItem,
     DxScrollView,
     DxButton,
-    OrderFindForm
+    OrderFindForm,
+    ServiceTypeForm,
+    UnitForm
   }
 }
 </script>
