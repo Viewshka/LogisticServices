@@ -88,6 +88,23 @@ namespace LogisticService.WebUI
                 await roleManager.CreateAsync(identityRole);
                 await userManager.CreateAsync(user);
                 await userManager.AddToRoleAsync(user, role.ToString());
+
+                if (role == RolesEnum.Courier)
+                {
+                    var secondCourierName = $"{role.ToString()}2";
+                    var secondCourier = new ApplicationUser
+                    {
+                        Id = ((int) role) + 1,
+                        UserName = secondCourierName,
+                        NormalizedUserName = secondCourierName.ToUpper(),
+                        EmailConfirmed = true,
+                        PasswordHash = hasher.HashPassword(null, secondCourierName.ToLower()),
+                        LockoutEnabled = true,
+                        SecurityStamp = Guid.NewGuid().ToString("D"),
+                    };
+                    await userManager.CreateAsync(secondCourier);
+                    await userManager.AddToRoleAsync(secondCourier, role.ToString());
+                }
             }
 
             var units = new List<Unit>
