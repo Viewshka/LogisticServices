@@ -49,7 +49,6 @@
     "vue-hot-reload-api": "^2.3.4",
     "vue-loader": "^15.9.5",
     "vue-template-compiler": "^2.6.11",
-    "vuex": "^3.5.1",
     "webpack": "^4.41.2",
     "webpack-bundle-tracker": "^0.4.3",
     "webpack-cli": "^3.3.10"

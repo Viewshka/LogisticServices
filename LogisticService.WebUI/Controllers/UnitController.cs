@@ -1,7 +1,5 @@
 ﻿using System.Threading.Tasks;
 using DevExtreme.AspNet.Data;
-using LogisticService.Application.Common;
-using LogisticService.Application.Feature.Units;
 using LogisticService.Application.Feature.Units.Commands.Create;
 using LogisticService.Application.Feature.Units.Commands.Delete;
 using LogisticService.Application.Feature.Units.Commands.Update;

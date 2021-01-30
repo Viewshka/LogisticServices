@@ -3,10 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using LogisticService.Application.Common.Access;
 using LogisticService.Application.Common.Interfaces;
-using LogisticService.Core.Entities.Identity;
 using LogisticService.Core.Enums;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace LogisticService.Application.Feature.User.Queries.GetCurrentUser

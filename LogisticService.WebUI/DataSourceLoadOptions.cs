@@ -5,7 +5,7 @@ using DevExtreme.AspNet.Data.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace LogisticService.Application.Common {
+namespace LogisticService.WebUI {
 
     [ModelBinder(BinderType = typeof(DataSourceLoadOptionsBinder))]
     public class DataSourceLoadOptions : DataSourceLoadOptionsBase {
