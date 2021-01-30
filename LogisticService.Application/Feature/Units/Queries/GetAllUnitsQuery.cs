@@ -6,7 +6,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Unit = LogisticService.Core.Entities.Unit;
 
-namespace LogisticService.Application.Feature.Units
+namespace LogisticService.Application.Feature.Units.Queries
 {
     public class GetAllUnitsQuery : IRequest<IEnumerable<Unit>>
     {
