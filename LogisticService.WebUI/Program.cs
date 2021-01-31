@@ -98,7 +98,7 @@ namespace LogisticService.WebUI
                         UserName = secondCourierName,
                         NormalizedUserName = secondCourierName.ToUpper(),
                         EmailConfirmed = true,
-                        PasswordHash = hasher.HashPassword(null, secondCourierName.ToLower()),
+                        PasswordHash = hasher.HashPassword(null, "AZDAadwagb611z5!1"),
                         LockoutEnabled = true,
                         SecurityStamp = Guid.NewGuid().ToString("D"),
                     };

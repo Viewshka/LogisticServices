@@ -24,6 +24,7 @@
         @focused-row-changed="focusedRowChanged"
         @toolbar-preparing="toolbarPreparing($event)"
         @context-menu-preparing="contextMenuPreparing($event)"
+        @exporting="onExporting"
     >
       <DxColumn
           :width="90"
@@ -161,7 +162,10 @@
       <DxHeaderFilter :visible="true" :allow-search="true"/>
       <DxColumnChooser :enabled="true" mode="select"/>
       <DxScrolling mode="virtual" row-rendering-mode="virtual" column-rendering-mode="virtual"/>
-
+      <DxExport
+          :enabled="true"
+          :allow-export-selected-data="true"
+      />
       <template #buttonNavigateToParagraphsTemplate={data}>
         <DxButton
             hint="Посмотреть всю информацию о заказе"
@@ -213,8 +217,11 @@ import DxDataGrid, {
   DxSummary,
   DxGroupItem,
   DxLookup,
+  DxExport,
 } from "devextreme-vue/data-grid";
-
+import ExcelJS from 'exceljs';
+import {exportDataGrid} from 'devextreme/excel_exporter';
+import saveAs from 'file-saver';
 import notify from "devextreme/ui/notify";
 import auth from "../auth";
 import {confirm,} from 'devextreme/ui/dialog';
@@ -437,7 +444,21 @@ export default {
             }
           });
     },
-
+    onExporting(e) {
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet('P2W');
+      exportDataGrid({
+        component: e.component,
+        worksheet: worksheet,
+        autoFilterEnabled: true
+      }).then(() => {
+        // https://github.com/exceljs/exceljs#writing-xlsx
+        workbook.xlsx.writeBuffer().then((buffer) => {
+          saveAs(new Blob([buffer], {type: 'application/octet-stream'}), 'ELITE_Export.xlsx');
+        });
+      });
+      e.cancel = true;
+    },
     contextMenuPreparing(e) {
       if (e.target !== 'header' && e.target !== 'headerPanel') {
         if (!e.items) e.items = [];
@@ -532,6 +553,7 @@ export default {
     DxGroupItem,
     DxButton,
     DxLookup,
+    DxExport,
   },
 }
 </script>

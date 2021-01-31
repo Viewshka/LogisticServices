@@ -20,7 +20,12 @@
         :allow-column-resizing="true"
 
         @toolbar-preparing="toolbarPreparing($event)"
+        @exporting="onExporting"
     >
+      <DxExport
+          :enabled="true"
+          :allow-export-selected-data="true"
+      />
       <DxColumn
           :width="90"
           :hiding-priority="6"
@@ -89,9 +94,13 @@ import DxDataGrid, {
   DxSummary,
   DxGroupItem,
   DxLookup,
+  DxExport,
 } from "devextreme-vue/data-grid";
 
 import * as AspNetData from "devextreme-aspnet-data-nojquery";
+import {exportDataGrid} from 'devextreme/excel_exporter';
+import saveAs from 'file-saver';
+import ExcelJS from 'exceljs';
 
 const dataSource = AspNetData.createStore({
   key: 'id',
@@ -119,6 +128,21 @@ export default {
     };
   },
   methods: {
+    onExporting(e) {
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet('P2W');
+      exportDataGrid({
+        component: e.component,
+        worksheet: worksheet,
+        autoFilterEnabled: true
+      }).then(() => {
+        // https://github.com/exceljs/exceljs#writing-xlsx
+        workbook.xlsx.writeBuffer().then((buffer) => {
+          saveAs(new Blob([buffer], {type: 'application/octet-stream'}), 'ELITE_Export.xlsx');
+        });
+      });
+      e.cancel = true;
+    },
     toolbarPreparing(e) {
       e.toolbarOptions.items.unshift(
           {
@@ -158,6 +182,7 @@ export default {
     DxGroupItem,
     DxButton,
     DxLookup,
+    DxExport,
   },
 }
 </script>
